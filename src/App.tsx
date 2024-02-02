@@ -28,6 +28,8 @@ function App() {
   const [languages, setLanguages] = useState<{ [repository: string]: Language }>({}); // key is the repo name
                                                                                       // or else the languages state will be set for each repository, and the rendering part of the code will display the combined languages of all repositories.
 
+  const [searchedRepositories, setSearchedRepositories] = useState<Repo[]>([]);
+
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -80,6 +82,13 @@ function App() {
 
   },[repositories]) // called when repository change
 
+  useEffect(() => {
+    const filtered = repositories.filter((repo) =>
+      repo.name.includes('30')
+    );
+    setSearchedRepositories(filtered);
+  }, [repositories]);
+
   
   return (
     <div className="App">
@@ -99,6 +108,18 @@ function App() {
         )}
         </div>
       ))}
+      <h1>Search</h1>
+      {searchedRepositories.map((repository) => (
+        <div key={repository.id}> 
+          <p>{repository.name} {repository.description}</p>
+          {languages[repository.name] && (
+          <span>
+            Languages: {Object.keys(languages[repository.name]).join(', ')}
+          </span>
+        )}
+        </div>
+      ))}
+
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
