@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
-import { fetchUser } from './api/userRequest';
 import { fetchRepositories } from './api/repoRequest';
+import SearchUser from './components/searchUser';
 
-interface User {
-  name: string;
-  login: string;
-  bio: string;
-}
 
 interface Repo {
   id: number;
@@ -23,26 +18,12 @@ interface Language {
 
 function App() {
 
-  const [user, setUser] = useState<User>({name:'', login:'', bio:''});
   const [repositories, setRepositories] = useState<Repo[]>([]);
   const [languages, setLanguages] = useState<{ [repository: string]: Language }>({}); // key is the repo name
                                                                                       // or else the languages state will be set for each repository, and the rendering part of the code will display the combined languages of all repositories.
 
   const [searchedRepositories, setSearchedRepositories] = useState<Repo[]>([]);
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const userData = await fetchUser('Ruth12mak');
-        setUser(userData);
-        //console.log('User data:', userData);
-      } catch (error: any) {
-        console.error('Error fetching user:', error.message);
-      }
-    };
-
-    getUser();
-  }, []);
 
 
   useEffect(() => {
@@ -92,11 +73,9 @@ function App() {
   
   return (
     <div className="App">
-      <h1>User</h1>
-      <p>{JSON.stringify(user)}</p>
-      <p>{user.name}</p>
-      <p>{user.login}</p>
-      <p>{user.bio}</p>
+
+      <SearchUser/>
+
       <h1>Repositories</h1>
       {repositories.map((repository) => (
         <div key={repository.id}> 
@@ -119,21 +98,6 @@ function App() {
         )}
         </div>
       ))}
-
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hello!
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
     </div>
   );
 }
