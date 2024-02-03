@@ -1,39 +1,18 @@
 import React, { useEffect, useState } from 'react';
 //import logo from './logo.svg';
 import './App.css';
-import { fetchRepositories } from './api/repoRequest';
 import SearchUser from './components/searchUser';
 import UserPage from './components/UserPage';
 import { Route, Routes } from 'react-router-dom';
-import { Repo, Language } from './utils/types';
 
 
 
 function App() {
 
-  const [repositories, setRepositories] = useState<Repo[]>([]);
-  const [languages, setLanguages] = useState<{ [repository: string]: Language }>({}); // key is the repo name
-                                                                                      // or else the languages state will be set for each repository, and the rendering part of the code will display the combined languages of all repositories.
-
-  const [searchedRepositories, setSearchedRepositories] = useState<Repo[]>([]);
+  //const [searchedRepositories, setSearchedRepositories] = useState<Repo[]>([]);
 
 
-
-  useEffect(() => {
-    const getRepositories = async () => {
-      try {
-        const repos = await fetchRepositories('Ruth12mak');
-        //console.log('User repos:', repos);
-        setRepositories(repos);
-      } catch(error: any) {
-        throw new Error(error.message);
-      }
-  
-    }
-    getRepositories();
-  },[])
-
-  useEffect(() => {
+/*   useEffect(() => {
     const fetchLanguages = async (repository: Repo) => {
       try {
         const response = await fetch(`${repository.languages_url}`);
@@ -54,14 +33,14 @@ function App() {
       fetchLanguages(repository);
     })
 
-  },[repositories]) // called when repository change
+  },[repositories]) */ // called when repository change
 
-  useEffect(() => {
+  /* useEffect(() => {
     const filtered = repositories.filter((repo) =>
       repo.name.includes('30')
     );
     setSearchedRepositories(filtered);
-  }, [repositories]);
+  }, [repositories]); */
 
   
   return (

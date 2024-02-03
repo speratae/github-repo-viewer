@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { fetchUser } from '../api/userRequest';
 import { User } from '../utils/types'
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function SearchUser() {
 
