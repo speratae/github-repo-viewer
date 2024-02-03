@@ -3,18 +3,11 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import { fetchRepositories } from './api/repoRequest';
 import SearchUser from './components/searchUser';
+import UserPage from './components/UserPage';
+import { Route, Routes } from 'react-router-dom';
+import { Repo, Language } from './utils/types';
 
 
-interface Repo {
-  id: number;
-  name: string;
-  description: string;
-  languages_url: string;
-}
-
-interface Language {
-  [language: string]: number; // index that is a string and a value that is a number
-}
 
 function App() {
 
@@ -72,33 +65,15 @@ function App() {
 
   
   return (
-    <div className="App">
 
-      <SearchUser/>
+    <Routes>
+      <Route path='/' element={ <SearchUser/> }/>
+      <Route path='/user/:username' 
+      element={<UserPage />}
+    />
 
-      <h1>Repositories</h1>
-      {repositories.map((repository) => (
-        <div key={repository.id}> 
-          <p>{repository.name} {repository.description}</p>
-          {languages[repository.name] && (
-          <span>
-            Languages: {Object.keys(languages[repository.name]).join(', ')}
-          </span>
-        )}
-        </div>
-      ))}
-      <h1>Search</h1>
-      {searchedRepositories.map((repository) => (
-        <div key={repository.id}> 
-          <p>{repository.name} {repository.description}</p>
-          {languages[repository.name] && (
-          <span>
-            Languages: {Object.keys(languages[repository.name]).join(', ')}
-          </span>
-        )}
-        </div>
-      ))}
-    </div>
+    </Routes>
+    
   );
 }
 
