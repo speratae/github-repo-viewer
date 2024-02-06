@@ -1,0 +1,16 @@
+nav .nav-container {
+    background-color: #f6f8fa;
+    border-bottom: 1px solid #d8dee4;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+nav .nav-container .nav-item {
+    margin: 10px 5px;
+}
+
+nav .nav-container p.page-title {
+    font-weight: 500;
+    text-transform: lowercase;
+}

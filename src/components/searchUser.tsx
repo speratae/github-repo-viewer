@@ -5,6 +5,7 @@ import { User } from '../utils/types'
 import { useNavigate } from 'react-router-dom';
 import '../css/searchPageStyle.css'
 import '../css/cardStyle.css'
+import NavBar  from '../components/NavBar';
 
 function SearchUser() {
 
@@ -41,6 +42,8 @@ function SearchUser() {
     
     return (
       <div id='container'>
+
+        <NavBar/>
 
         <div id='search-area'>
           <p>Introduce github username</p>

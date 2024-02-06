@@ -2,6 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { Language, Repository, User } from '../utils/types'
 import { fetchRepositories } from '../api/repoRequest';
 import { useLocation, useNavigate } from 'react-router-dom';
+import '../css/cardStyle.css'
+import '../css/userPageStyle.css'
+import NavBar from './NavBar';
 
 function UserPage (  ) {
 
@@ -122,6 +125,8 @@ function UserPage (  ) {
 
     const resetQuery = () => {
       setFilteredRepositories(repositories);
+      setSearchedRepositories('');
+      setSelectedLanguage('');
     }
 
     useEffect(() => {
@@ -142,7 +147,10 @@ function UserPage (  ) {
         <>
             {user && (
                 <>
-                    <div>
+
+                    <NavBar userLogin={user && user.login} />
+                    
+                    <div className='container'>
 
                         <aside>
                             <h1>{user.name}</h1>
@@ -179,7 +187,7 @@ function UserPage (  ) {
                             )}
 
                             {filteredRepositories.map((repository) => (
-                                <div key={repository.id}> 
+                                <div key={repository.id} className='card'> 
                                     <p>{repository.name} {repository.description}</p>
                                     {languages[repository.name] && (
                                     <span>
