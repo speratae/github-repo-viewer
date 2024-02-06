@@ -2,6 +2,7 @@ export type User = {
     name: string;
     login: string;
     bio: string;
+    avatar_url: string;
 }
 
 export type Repository = {

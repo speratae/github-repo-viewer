@@ -1,0 +1,33 @@
+html, body, #root {
+    height: 100%;
+}
+
+div #container {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center;
+    justify-content: center; */
+    height: 100%;
+    border: 1px solid red;
+}
+
+#search-area {
+    background-color: #f0f0f0; /* Light gray background */
+    flex: 1; /* Take up remaining vertical space */
+    max-height: 50%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-area {
+    flex: 1;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+

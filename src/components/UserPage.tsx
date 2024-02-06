@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Language, Repository, User } from '../utils/types'
 import { fetchRepositories } from '../api/repoRequest';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -100,7 +100,7 @@ function UserPage (  ) {
     ? repositories.filter((repo) => languages[repo.name]?.[selectedLanguage])
     : repositories; */
         
-    const filterDisplayedRepositories = () => {
+    const filterDisplayedRepositories = useCallback(() => {
         let filteredRepos = repositories;
         if (searchedRepositories) {
             filteredRepos = filteredRepos.filter((repo) => repo.name.includes(searchedRepositories));
@@ -109,7 +109,7 @@ function UserPage (  ) {
             filteredRepos = filteredRepos.filter((repo) => languages[repo.name]?.[selectedLanguage]);
         }
         setFilteredRepositories(filteredRepos);
-    }
+    }, [repositories, searchedRepositories, selectedLanguage, languages])
 
     const allLanguages = Object.values(languages) // takes the values of the languages object
         .flatMap(langObj => Object.keys(langObj)) // flatten the array of language objects into a single array of languages
@@ -119,6 +119,24 @@ function UserPage (  ) {
                                                         // .user: accesses the user property from the casted object
     //console.log(user);
     //console.log(languages);
+
+    const resetQuery = () => {
+      setFilteredRepositories(repositories);
+    }
+
+    useEffect(() => {
+      console.log('Selected Language (from state):', selectedLanguage);
+      filterDisplayedRepositories();
+    }, [selectedLanguage, filterDisplayedRepositories]);
+
+    const setLanguageFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const newSelectedLanguage = e.target.value;
+      setSelectedLanguage(newSelectedLanguage);
+      console.log('Selected Language (from event):', newSelectedLanguage);
+      console.log('Selected Language (from state):', selectedLanguage);
+      filterDisplayedRepositories();
+    };
+    
 
     return (
         <>
@@ -144,7 +162,7 @@ function UserPage (  ) {
                             <select
                             id="languageFilter"
                             value={selectedLanguage}
-                            onChange={(e) => setSelectedLanguage(e.target.value)}
+                            onChange={/* (e) => setSelectedLanguage(e.target.value) */  (e) => setLanguageFilter(e)}
                             >
                             <option value="">All Languages</option>
                             {allLanguages.map((lang) => (
@@ -153,6 +171,12 @@ function UserPage (  ) {
                                 </option>
                             ))}
                             </select>
+
+                            { (selectedLanguage || searchedRepositories) && (
+                              <>
+                              <p onClick={resetQuery}>Clear filter</p>
+                              </>
+                            )}
 
                             {filteredRepositories.map((repository) => (
                                 <div key={repository.id}> 
