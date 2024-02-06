@@ -7,29 +7,3 @@ div.card {
     align-items: center;
     justify-content: center;
 }
-
-.card .card-img {
-    flex: 0 0 auto;
-    border: 1px solid green;
-    max-width: 18%;
-}
-
-.card .card-img img {
-    border: 1px solid blue;
-    border-radius: 50%;
-    max-width: 100%;
-}
-
-.card .card-content {
-    flex: 1;
-    border: 1px solid pink;
-}
-
-.card .card-login {
-    color: blue;
-}
-
-.card .card-login:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}

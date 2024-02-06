@@ -12,8 +12,8 @@ div #container {
 }
 
 #search-area {
-    background-color: #f0f0f0; /* Light gray background */
-    flex: 1; /* Take up remaining vertical space */
+    border-bottom: 1px solid #f6f8fa;
+    flex: 1;
     max-height: 50%;
 
     display: flex;
@@ -22,7 +22,7 @@ div #container {
     justify-content: center;
 }
 
-.user-area {
+#user-area {
     flex: 1;
     
     display: flex;
@@ -31,3 +31,41 @@ div #container {
     justify-content: center;
 }
 
+.text-info {
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+div#user-area .user-card {
+    display: flex;
+}
+
+.card .card-img {
+    flex: 0 0 auto;
+    max-width: 18%;
+}
+
+.card .card-img img {
+    border: 1px solid #f6f8fa;
+    border-radius: 50%;
+    max-width: 100%;
+}
+
+.card .card-content {
+    flex: 1;
+    margin-left: 15px;
+}
+
+.card .card-login {
+    color: #458de3;
+    font-weight: 500;
+}
+
+.card .card-login:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.user-card .card-title {
+    font-weight: 500;
+}
