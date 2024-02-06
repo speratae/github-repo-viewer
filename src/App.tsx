@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react';
-//import logo from './logo.svg';
 import './App.css';
 import SearchUser from './components/searchUser';
 import UserPage from './components/UserPage';
