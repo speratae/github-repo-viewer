@@ -21,7 +21,6 @@ To run the project locally, follow these steps:
 ### `npm start`
 
 5. Open your web browser and visit [http://localhost:3000](http://localhost:3000) to view the application.
-## Available Scripts
 
 ## Future Improvements
 - **Component Refactoring**: Further divide components into smaller, reusable components to improve modularity and maintainability.
