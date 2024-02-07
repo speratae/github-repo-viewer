@@ -40,8 +40,8 @@ div#user-area .user-card {
     display: flex;
 }
 
-.card .card-img {
-    flex: 0 0 auto;
+.card .card-img {/* 
+    flex: 0 0 auto; */
     max-width: 18%;
 }
 

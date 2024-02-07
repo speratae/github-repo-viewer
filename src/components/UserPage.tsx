@@ -151,7 +151,7 @@ function UserPage (  ) {
 
                     <div className='container'>
 
-                        <aside className='user-area'>
+                        <aside className='user-info'>
                           <img src={user.avatar_url} alt='avatar'/>
                           <h2>{user.name}</h2>
                           <h3>{user.login}</h3>
@@ -201,11 +201,11 @@ function UserPage (  ) {
                                     <p className='description'>{repository.description}</p>
 
                                     {languages[repository.name] && (
-                                      <span>
-                                      {Object.keys(languages[repository.name]).map((language, index) => (
-                                          <span key={index} className="language">{language}</span>
-                                      ))}
-                                      </span>
+                                        <span>
+                                        {Object.keys(languages[repository.name]).map((language, index) => (
+                                            <span key={index} className="language">{language}</span>
+                                        ))}
+                                        </span>
                                     )}
 
                                 </div>
