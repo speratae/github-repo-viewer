@@ -1,28 +1,34 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Language, Repository, User } from '../utils/types'
 import { fetchRepositories } from '../api/repoRequest';
+import { fetchLanguages } from '../api/langRequest';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../css/userPageStyle.css'
 import NavBar from './NavBar';
 
+/**
+ * Represents a React component for the user page.
+ * @function UserPage
+ * @returns {JSX.Element} JSX markup for the search user component.
+ */
 function UserPage (  ) {
 
-    const location = useLocation();
-    const navigate = useNavigate();
+    // state hooks for managing user data and search functionality
+    const location = useLocation(); // react router's location hook for accessing state
+    const navigate = useNavigate(); // react router's navigate hook for navigation
+    const [user, setUser] = useState<User | null>(null); // holds the user data retrieved from the the location state
+    const [repositories, setRepositories] = useState<Repository[]>([]); // holds the list of repositories fetched from the api
+    const [languages, setLanguages] = useState<{ [repository: string]: Language }>({}); // holds the languages used in repositories, with repository names as keys
+    const [searchedRepositories, setSearchedRepositories] = useState<string>(''); // holds the input value for the searched repositories
+    const [filteredRepositories, setFilteredRepositories] = useState<Repository[]>([]); // holds the list of repositories after filtering based on search or language selection
+    const [selectedLanguage, setSelectedLanguage] = useState<string>(''); // holds the selected programming language for filtering repositories.
 
-    const [user, setUser] = useState<User | null>(null);
-    const [repositories, setRepositories] = useState<Repository[]>([]);
-    const [languages, setLanguages] = useState<{ [repository: string]: Language }>({}); // key is the repo name
-                                                                                      // or else the languages state will be set for each repository, and the rendering part of the code will display the combined languages of all repositories.
-
-
-    const [searchedRepositories, setSearchedRepositories] = useState<string>(''); 
-    const [filteredRepositories, setFilteredRepositories] = useState<Repository[]>([]); 
-    const [selectedLanguage, setSelectedLanguage] = useState<string>('');
-    //const [searchedRepo, setSearchedRepo] = useState<string>('');  
-
-        
     useEffect(() => {
+        /**
+       * Asynchronously fetches user data, repositories, and languages upon component mounting or state change.
+       * @function fetchData
+       * @returns {void}
+       */
         const fetchData = async () => {
           try {
             if (location.state && location.state.user) {
@@ -35,7 +41,11 @@ function UserPage (  ) {
     
               // fetch languages sequentially
               for (const repository of repos) {
-                await fetchLanguages(repository);
+                const languages = await fetchLanguages(repository);
+                setLanguages(prevLanguages => ({
+                  ...prevLanguages,
+                  [repository.name]: languages,
+                }));
               }
             } else {
               // handle the case where user information is not available
@@ -49,59 +59,12 @@ function UserPage (  ) {
     
         fetchData();
       }, [location.state, navigate]);
-
-      
-    /* const getRepositories = async () => {
-        try {
-            if(user) {
-                const repos = await fetchRepositories(user.login);
-                //console.log('User repos:', repos);
-                setRepositories(repos);
-            }
-        } catch(error: any) {
-            throw new Error(error.message);
-        }
-      
-    } */
-    //getRepositories();
-
-    const fetchLanguages = async (repository: Repository) => {
-        try {
-          const response = await fetch(`${repository.languages_url}`);
-          const languages = await response.json();
-          //console.log('Repo:', repository);
-          //console.log('Languages:', languages);
-          //console.log(response);
-          setLanguages((prevLanguages) => ({ // just using setLanguages was making the languages overwrite
-            ...prevLanguages, // cerates a copy of the prev state
-            [repository.name]: languages, // creates new object with value fetched
-          }));
-        } catch(error: any) {
-          throw new Error(error.message);
-        }
-      };
-  
-    /* const fetchAllLanguages = async () => {
-        for (const repository of repositories) { // change for each bc its a function and not async
-            await fetchLanguages(repository);
-        }
-    }; */
-    //fetchAllLanguages();
-      
     
-    /* const searchRepositories = () => {
-        const filtered = repositories.filter((repo) =>
-          repo.name.includes(searchedRepo)
-        );
-        //console.log(filtered);
-        setSearchedRepositories(filtered);
-        //console.log(searchRepositories);
-    }; 
-
-    const filteredRepos = selectedLanguage
-    ? repositories.filter((repo) => languages[repo.name]?.[selectedLanguage])
-    : repositories; */
-        
+    /**
+     * Filters displayed repositories based on search query or selected language.
+     * @function filterDisplayedRepositories
+     * @returns {void}
+     */
     const filterDisplayedRepositories = useCallback(() => {
         let filteredRepos = repositories;
         if (searchedRepositories) {
@@ -113,15 +76,16 @@ function UserPage (  ) {
         setFilteredRepositories(filteredRepos);
     }, [repositories, searchedRepositories, selectedLanguage, languages])
 
-    const allLanguages = Object.values(languages) // takes the values of the languages object
-        .flatMap(langObj => Object.keys(langObj)) // flatten the array of language objects into a single array of languages
-        .filter((lang, index, self) => self.indexOf(lang) === index); // checks whether the current language is the first occurrence in the array
+    // extracting all unique languages used in repositories for filtering
+    const allLanguages = Object.values(languages) // taking the values of the languages object
+        .flatMap(langObj => Object.keys(langObj)) // flattening the array of language objects into a single array of languages
+        .filter((lang, index, self) => self.indexOf(lang) === index); // checking whether the current language is the first occurrence in the array
 
-    //const user = (location.state as { user: User }).user; //  cast the location.state to an object with a user property of type User
-                                                        // .user: accesses the user property from the casted object
-    //console.log(user);
-    //console.log(languages);
-
+    /**
+     * Resets search and filter queries.
+     * @function resetQuery
+     * @returns {void}
+     */
     const resetQuery = () => {
       setFilteredRepositories(repositories);
       setSearchedRepositories('');
@@ -129,15 +93,18 @@ function UserPage (  ) {
     }
 
     useEffect(() => {
-      console.log('Selected Language (from state):', selectedLanguage);
       filterDisplayedRepositories();
     }, [selectedLanguage, filterDisplayedRepositories]);
 
+    /**
+     * Sets the selected language for filtering repositories.
+     * @function setLanguageFilter
+     * @param {React.ChangeEvent<HTMLSelectElement>} e - The event object.
+     * @returns {void}
+     */
     const setLanguageFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const newSelectedLanguage = e.target.value;
       setSelectedLanguage(newSelectedLanguage);
-      console.log('Selected Language (from event):', newSelectedLanguage);
-      console.log('Selected Language (from state):', selectedLanguage);
       filterDisplayedRepositories();
     };
     
@@ -151,17 +118,17 @@ function UserPage (  ) {
 
                     <div className='container'>
 
-                        <aside className='user-info'>
+                        <aside className='user-info'> {/* user data */}
                           <img src={user.avatar_url} alt='avatar'/>
-                          <h2>{user.name}</h2>
+                          <h2 className='bold-style'>{user.name}</h2>
                           <h3>{user.login}</h3>
                           <p>{user.bio}</p>
                         </aside>
 
-                        <div className='repo-area'>
+                        <div className='repo-area'> {/* repository list */}
                           <div className='filter-area'>
 
-                            <div className='search-area'>
+                            <div className='search-area'> {/* search input field and button */}
                               <input
                               type='text'
                               value={searchedRepositories}
@@ -175,7 +142,7 @@ function UserPage (  ) {
                             <select
                             id="languageFilter"
                             value={selectedLanguage}
-                            onChange={/* (e) => setSelectedLanguage(e.target.value) */  (e) => setLanguageFilter(e)}
+                            onChange={(e) => setLanguageFilter(e)}
                             >
                             <option value="">All Languages</option>
                             {allLanguages.map((lang) => (
@@ -186,8 +153,8 @@ function UserPage (  ) {
                             </select>
 
                             { (selectedLanguage || searchedRepositories) && (
-                              <>
-                              <p onClick={resetQuery} className='clear-filter'>Clear filter</p>
+                              <> {/* displays clear option if any of the filters hav a value set */}
+                              <p onClick={resetQuery} className='clear-filter link-style'>Clear filter</p>
                               </>
                             )}
                           </div>
@@ -197,13 +164,13 @@ function UserPage (  ) {
 
                                 <div key={repository.id} className='card repo-card'> 
 
-                                    <p className='title'>{repository.name}</p>
+                                    <p className='title bold-style'>{repository.name}</p>
                                     <p className='description'>{repository.description}</p>
 
                                     {languages[repository.name] && (
                                         <span>
                                         {Object.keys(languages[repository.name]).map((language, index) => (
-                                            <span key={index} className="language">{language}</span>
+                                            <span key={index} className="language bold-style">{language}</span>
                                         ))}
                                         </span>
                                     )}

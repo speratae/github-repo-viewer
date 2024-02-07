@@ -1,0 +1,18 @@
+html, body, #root {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+}
+
+.link-style {
+    color: #458de3;
+}
+
+.link-style:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.bold-style { 
+    font-weight: 500;
+}

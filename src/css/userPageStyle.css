@@ -1,25 +1,32 @@
-html, body, #root {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-}
-
 div.container {
     display: grid;
     grid-template-columns: 1fr 3fr;
     column-gap: 5px;
 }
 
-
-.user-info {
+.user-info,
+div.repo-area,
+div.repo-area .repo-card,
+.filter-area {
     display: flex;
+}
+
+.user-info,
+div.repo-area,
+div.repo-area .repo-card {
     flex-direction: column;
-    flex-wrap: wrap;
-    align-self: flex-start;
-    align-items: center;
-    max-width: 100%;
     padding: 15px;
     margin: 10px;
+}
+
+.user-info,
+div.repo-area {
+    align-items: center;
+}
+
+.user-info {
+    align-self: flex-start;
+    max-width: 100%;
 }
 
 .user-info img {
@@ -32,47 +39,26 @@ div.container {
     margin-bottom: 1px;
 }
 
-.user-info h2 {
-    font-weight: 500;
-}
-
 .user-info h3 {
     font-weight: 300;
     color: #989da3;
 }
 
-.repo-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    padding: 15px;
-    margin: 10px;
-}
-
 div.repo-area .repo-card {
     width: 80%;
-    display: flex;
-    padding: 15px;
-    flex-direction: column;
-    margin: 10px 0;
     border: 1px solid #D8DEE4;
-    ;
     box-sizing: border-box;
 }
 
 .card .title {
     color: #458de3;
-    font-weight: 500;
 }
-
 
 .card .language {
     display: inline-block;
     background-color: #D8DEE4;
     padding: 4px 8px;
     margin: 3px 5px;
-    font-weight: 500;
     text-transform: uppercase;
     font-size: 12px;
     border-radius: 50px;
@@ -83,25 +69,23 @@ div.repo-area .repo-card {
     color: #656d76;
 }
 
-.filter-area {
-    display: flex;
-}
-
 .search-area {
     border: 1px solid #656d76;
     border-radius: 5px;
     padding: 5px;
 }
 
+.search-area button,
 .search-area input {
-    background-color: transparent;
-    border: none;
+  background-color: transparent;
+  border: none;
+}
+
+.search-area input {
     outline: none;
 }
 
 .search-area button {
-    background-color: transparent;
-    border: none;
     cursor: pointer;
 }
 
@@ -111,22 +95,13 @@ select {
 }
 
 p.clear-filter {
-    color: #458de3;
     font-size: 14px;
 }
 
-p.clear-filter:hover {
-    cursor: pointer;
-    text-decoration: underline;
-}
 
 @media (max-width: 1024px) {
     div.container {
         display: flex;
-        flex-direction: column;
-    }
-
-    .repo-area {
         flex-direction: column;
     }
 

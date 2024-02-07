@@ -11,6 +11,5 @@ nav .nav-container .nav-item {
 }
 
 nav .nav-container p.page-title {
-    font-weight: 500;
     text-transform: lowercase;
 }
